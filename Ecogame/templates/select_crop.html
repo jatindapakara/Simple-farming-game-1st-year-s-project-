@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Select Your Crop</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <style>
+        .crop-selection-grid {
+            display: flex;
+            gap: 40px;
+            justify-content: center;
+            padding: 50px;
+        }
+        .crop-card {
+            background-color: #FFFFFF;
+            border: 5px solid #FFC000;
+            border-radius: 20px;
+            padding: 30px;
+            width: 300px;
+            text-align: center;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+        }
+        .crop-card h2 {
+            font-size: 32px;
+            color: #00803C;
+        }
+    </style>
+</head>
+<body class="farm-page">
+    <header>
+        <h1 class="game-title">Choose Your Crop 🌾</h1>
+    </header>
+
+    <div style="text-align: center; margin-bottom: 40px;">
+        <p style="font-size: 20px;">What kind of seeds will you plant in your farm today?</p>
+    </div>
+
+    <div class="crop-selection-grid">
+        {% for id, crop in crops.items() %}
+            <div class="crop-card">
+                <h2>{{ crop.name }}</h2>
+                <p>Base Yield: {{ crop.base_yield }} units</p>
+                <p>Sell Price: {{ crop.sell_price }} coins</p>
+                <a href="{{ url_for('handle_crop_choice', crop_type=id) }}" class="button">Plant This!</a>
+            </div>
+        {% endfor %}
+    </div>
+
+    <div style="text-align: center; margin-top: 40px;">
+        <a href="{{ url_for('farm') }}" class="button">⬅️ Never Mind, Back to Farm</a>
+    </div>
+</body>
+</html>

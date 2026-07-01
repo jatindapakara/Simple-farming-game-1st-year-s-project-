@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Eco Farm</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body class="farm-page">
+    <header>
+        <div class="farmer-icon">🧑‍🌾 {{ state.username }}</div>
+        <h1 class="game-title">Eco Farm Game</h1>
+        <div class="status-bar">
+            💰 Coins: {{ state.points }} | ❤️ Health: {{ state.farm_health }}
+        </div>
+    </header>
+
+    <div class="main-content">
+        
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="flash-message flash-{{ category }}" style="margin-bottom: 20px;">{{ message | safe }}</div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+
+        <div class="control-panel">
+            <a href="{{ url_for('select_crops') }}" class="control-button">🌾 Pick Seeds</a>
+            <a href="{{ url_for('water_grow') }}" class="control-button">💧 Water & Grow</a>
+            <a href="{{ url_for('advance_day') }}" class="control-button" style="background-color: #3498db; box-shadow: 0 5px 0 #2980b9;">🗓️ Advance Day</a>
+            
+            <a href="{{ url_for('shop') }}" class="control-button open-shop-button">🛍️ Open Shop</a>
+            
+            {% if state.crop_stage == 3 %}
+                <a href="{{ url_for('sell_crops') }}" class="control-button" style="background-color: #f1c40f; box-shadow: 0 5px 0 #e67e22;">💰 Sell Crops!</a>
+            {% endif %}
+            
+            <a href="{{ url_for('leaderboard') }}" class="control-button" style="background-color: #8E44AD; box-shadow: 0 5px 0 #6C3483;">🏆 Leaderboard</a>
+
+        </div>
+        
+        <div class="farm-display-area">
+            <h2 style="color: #00803C; margin-top: 0;">Farm Status:</h2>
+            
+            <div style="font-size: 22px; font-weight: bold; margin-bottom: 20px; padding: 10px; border: 2px dashed #00803C; border-radius: 10px;">
+                Current Weather: <span style="color: #004085;">{{ state.current_climate }}</span>
+            </div>
+            
+            {% if state.crop_chosen %}
+                <p style="font-size: 24px; font-weight: bold;">
+                    Current Crop: {{ state.crop_chosen.capitalize() }}
+                </p>
+            {% endif %}
+            
+            <p style="font-size: 20px; color: #555;">
+                {{ state.stage_description }}
+            </p>
+            
+            <div class="farm-grid">
+                {% for i in range(9) %}
+                    <div class="grid-cell">{{ grid_emoji }}</div>
+                {% endfor %}
+            </div>
+            
+            {% if state.crop_stage > 0 %}
+                <div style="margin-top: 30px; padding: 15px; background-color: #f0fff0; border-radius: 10px;">
+                    <p style="font-size: 16px;">
+                        **Farm Health (Sustainability Score):** {{ state.farm_health }}/100 <br> 
+                        *Higher health means better yield, regardless of the weather!*
+                    </p>
+                </div>
+            {% endif %}
+        </div>
+        
+        <div class="shelf-area">
+            <div class="shelf-title">🎒 Your Backpack</div>
+            <ul>
+                {% if state.inventory %}
+                    {% for item in state.inventory %}
+                        <li>✨ {{ item }}</li>
+                    {% endfor %}
+                {% else %}
+                    <li>It's empty! Visit the 🛍️ Shop to buy tools!</li>
+                {% endif %}
+            </ul>
+        </div>
+    </div>
+</body>
+</html>

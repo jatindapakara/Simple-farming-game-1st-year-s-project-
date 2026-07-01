@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Eco Shop</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body class="farm-page">
+    <header>
+        <div class="farmer-icon">🧑‍🌾 {{ state.username }}</div>
+        <h1 class="game-title">The Eco Shop 🛍️</h1>
+        <div class="status-bar">
+            💰 Coins: {{ state.points }} | ❤️ Health: {{ state.farm_health }}
+        </div>
+    </header>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+                <div class="flash-message flash-{{ category }}">{{ message | safe }}</div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+
+    <div class="shop-grid">
+        {% for id, item in items.items() %}
+            <div class="item-card">
+                <h2>{{ item.name }}</h2>
+                <div class="cost">Cost: {{ item.cost }} 💰</div>
+                <p>{{ item.info }}</p>
+                <a href="{{ url_for('buy_item', item_id=id) }}" class="button">Buy Now!</a>
+            </div>
+        {% endfor %}
+    </div>
+
+    <div style="text-align: center; margin-top: 20px;">
+        <a href="{{ url_for('farm') }}" class="button">⬅️ Back to Farm</a>
+    </div>
+</body>
+</html>
